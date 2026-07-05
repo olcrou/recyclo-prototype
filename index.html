@@ -3,337 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoReward SG — NTU Edition</title>
+    <title>EcoReward SG Prototype</title>
+    <!-- 깔끔한 디자인을 위한 스타일 치트키 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            max-width: 450px; 
-            margin: 0 auto; 
-            min-height: 100vh; 
-            background-color: #0f172a; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #f8fafc;
-        }
-        ::-webkit-scrollbar { display: none; }
-        .glass {
-            background: rgba(30, 41, 59, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-    </style>
 </head>
-<body class="flex flex-col min-h-screen shadow-2xl relative bg-slate-950 pb-36">
+<body class="bg-slate-900 flex flex-col justify-center items-center min-h-screen font-sans p-4">
 
-    <!-- 1. HEADER -->
-    <header class="glass sticky top-0 z-50 px-5 py-4 flex justify-between items-center border-b border-slate-800/80">
-        <div>
-            <div class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <h1 class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">EcoReward SG</h1>
-            </div>
-            <p class="text-[10px] text-slate-400 font-bold tracking-wide mt-0.5">NTU CAMPUS & JURONG INITIATIVE</p>
-        </div>
-        <select id="langSelect" onchange="updateLanguage()" class="bg-slate-800 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 font-semibold border border-slate-700 focus:outline-none cursor-pointer">
-            <option value="EN">🇬🇧 EN</option>
-            <option value="CN">🇨🇳 华语</option>
-        </select>
-    </header>
+    <p class="text-slate-400 text-xs mb-3 text-center">💡 우측 상단의 언어 버튼과 각 기능 버튼들을 직접 클릭해보세요!</p>
 
-    <!-- 2. SCREEN CONTENT AREA -->
-    <div class="flex-1 p-4">
+    <!-- [스마트폰 본체 목업] -->
+    <div class="w-[360px] h-[740px] bg-slate-50 rounded-[36px] shadow-2xl overflow-hidden border-8 border-slate-700 flex flex-col relative">
         
-        <!-- [TAB 1: HOME SCREEN] -->
-        <div id="screenHome" class="space-y-4">
-            <div class="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 rounded-3xl p-5 shadow-[0_8px_30px_rgb(16,185,129,0.2)]">
-                <div class="flex justify-between items-center mb-1">
-                    <span class="text-[11px] font-bold uppercase tracking-widest text-emerald-100/80" id="lblCdcTitle">CDC Voucher Progress</span>
-                    <span id="txtPercent" class="text-xs font-extrabold text-amber-300 bg-black/20 px-2.5 py-0.5 rounded-full">90%</span>
+        <!-- 폰 상단 상태바 -->
+        <div class="bg-emerald-600 text-white px-5 pt-2 pb-1 flex justify-between items-center text-[10px] font-semibold">
+            <span>1:30 PM 🇸🇬</span>
+            <div class="flex items-center gap-1">
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- 앱 헤더 및 우측 상단 언어 설정 -->
+        <header class="bg-emerald-600 text-white px-4 pb-3 pt-1 flex justify-between items-center shadow-sm">
+            <div>
+                <h1 class="text-lg font-bold tracking-tight">EcoReward SG</h1>
+                <p class="text-[9px] text-emerald-100 opacity-80">NEA x CDC Voucher</p>
+            </div>
+            
+            <!-- [우측 상단 언어 선택 버튼] -->
+            <select id="langSelect" onchange="toggleLang()" class="bg-emerald-700 text-white text-[11px] rounded-full px-2 py-0.5 font-medium border border-emerald-500 focus:outline-none cursor-pointer">
+                <option value="EN">🇬🇧 EN</option>
+                <option value="CN">🇨🇳 华语</option>
+            </select>
+        </header>
+
+        <!-- 메인 화면 콘텐츠 (3가지 기능 배치) -->
+        <main class="flex-1 overflow-y-auto p-3 space-y-3">
+            
+            <!-- 상단: CDC 바우처 실시간 리워드 연동 바 -->
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-3.5 text-white shadow-xs">
+                <div class="flex justify-between items-center text-[10px] uppercase font-bold opacity-90 tracking-wider mb-1">
+                    <span id="cdcTitle">CDC Voucher Progress</span>
+                    <span class="text-amber-300 font-black">90%</span>
                 </div>
-                <div class="text-3xl font-black tracking-tight mb-1" id="txtPointsDisplay">450 / 500 PTS</div>
-                <p class="text-xs text-emerald-50/90 font-medium" id="txtCdcMessage">Swee lah! Only 50 points away from your $5 CDC Voucher!</p>
-                <div class="w-full bg-black/20 h-2 rounded-full overflow-hidden mt-4">
-                    <div id="barCdc" class="bg-gradient-to-r from-amber-400 to-orange-400 h-full rounded-full transition-all duration-500" style="width: 90%"></div>
+                <div class="text-xl font-black tracking-tight" id="userPts">450 / 500 PTS</div>
+                <p class="text-[11px] text-emerald-100 mt-1 leading-tight" id="cdcMsg">Swee lah! Only 50 points away from your $5 CDC Voucher!</p>
+                
+                <!-- 게이지 바 -->
+                <div class="w-full bg-emerald-900/30 h-2 rounded-full overflow-hidden mt-2.5">
+                    <div class="bg-amber-400 h-full rounded-full" style="width: 90%"></div>
                 </div>
             </div>
 
-            <div class="glass rounded-2xl p-4 space-y-3">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-map-location-dot text-amber-400 text-sm"></i>
-                    <h3 class="font-bold text-sm text-slate-200" id="lblMapTitle">Nearby Smart RVM Finder</h3>
+            <!-- [기능 1] AI Scan (카메라 스캔 시뮬레이션) -->
+            <section class="bg-white rounded-xl p-3 shadow-xs border border-slate-100">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-camera text-emerald-600 text-xs"></i>
+                    <h3 class="font-bold text-xs text-slate-800" id="scanTitle">AI Recycle Scanner</h3>
+                </div>
+                <p class="text-[10px] text-slate-400 mb-2" id="scanDesc">Click an item below to simulate a camera scan:</p>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="clickScan('bottle')" class="bg-slate-50 hover:bg-emerald-50 active:scale-95 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-bottle-water text-slate-400"></i> Plastic Bottle
+                    </button>
+                    <button onclick="clickScan('can')" class="bg-slate-50 hover:bg-emerald-50 active:scale-95 p-2 rounded-lg border border-slate-200 text-[11px] font-medium text-slate-700 transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-whiskey-glass text-slate-400"></i> Aluminium Can
+                    </button>
+                </div>
+
+                <!-- 클릭 시 나타나는 AI 판독 결과 박스 -->
+                <div id="scanResult" class="hidden mt-2 bg-slate-900 text-white rounded-lg p-2.5 text-[11px] space-y-0.5">
+                    <div class="flex justify-between font-bold text-emerald-400">
+                        <span id="resName">Plastic Bottle</span>
+                        <span id="resPts">+10 PTS</span>
+                    </div>
+                    <p class="text-slate-300 text-[10px] leading-tight"><strong class="text-amber-400" id="lblGuide">Guide:</strong> <span id="resInst">Rinse and toss in the blue bin!</span></p>
+                </div>
+            </section>
+
+            <!-- [기능 2] 위치 기반 스마트 리마인더 -->
+            <section class="bg-white rounded-xl p-3 shadow-xs border border-slate-100">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-bell text-amber-500 text-xs"></i>
+                    <h3 class="font-bold text-xs text-slate-800" id="remTitle">Location-Based Reminder</h3>
                 </div>
                 
-                <div id="notifBox" class="bg-slate-900/60 rounded-xl p-3.5 border border-slate-800/80 flex gap-3 items-start opacity-40 transition-all duration-300">
-                    <div class="bg-amber-500/10 border border-amber-500/20 p-2 rounded-xl text-amber-400">
-                        <i class="fa-solid fa-location-dot text-xs"></i>
+                <!-- 시뮬레이션 버튼 -->
+                <button onclick="clickReminder()" class="w-full bg-amber-500 hover:bg-amber-600 active:scale-98 text-white text-[11px] font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span id="btnRemText">Simulate Walking Past Toa Payoh Hub</span>
+                </button>
+
+                <!-- 폰 잠금화면 푸시 알림 팝업 효과 -->
+                <div id="popNotif" class="hidden mt-2 bg-slate-800 text-white rounded-lg p-2.5 shadow-md flex gap-2.5 items-start animate-bounce">
+                    <i class="fa-solid fa-leaf text-emerald-400 mt-0.5 text-xs"></i>
+                    <div class="text-[10px] flex-1">
+                        <div class="font-bold text-slate-200" id="notifTitle">Hey Toa Payoh Resident! 🇸🇬</div>
+                        <p class="text-slate-300 mt-0.5 leading-tight" id="notifBody">You are next to a recycling machine! Recycle now to claim your CDC Voucher before lunch.</p>
                     </div>
-                    <div class="flex-1 text-xs space-y-1">
-                        <span class="font-bold text-slate-300" id="notifTitle">GPS: Waiting for Campus Signal...</span>
-                        <p class="text-slate-400 text-[11px] leading-relaxed" id="notifBody">Select a Jurong Drop Off Spot in the controller below to simulate smart proximity notifications.</p>
+                </div>
+            </section>
+
+            <!-- [기능 3] 지역구 대항전 (소셜 경쟁) -->
+            <section class="bg-white rounded-xl p-3 shadow-xs border border-slate-100">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-trophy text-blue-500 text-xs"></i>
+                    <h3 class="font-bold text-xs text-slate-800" id="compTitle">Eco-Districts Competition</h3>
+                </div>
+                
+                <!-- 간단한 랭킹 스코어보드 -->
+                <div class="space-y-1 text-[10px] mb-2">
+                    <div class="flex justify-between bg-slate-50 p-1.5 rounded border-l-2 border-emerald-500">
+                        <span class="font-medium text-slate-600">1. Bishan</span>
+                        <span class="font-bold text-slate-800">45,200 pts</span>
+                    </div>
+                    <div class="flex justify-between bg-slate-50 p-1.5 rounded border-l-2 border-amber-500">
+                        <span class="font-medium text-slate-600">2. Toa Payoh</span>
+                        <span class="font-bold text-slate-800">45,050 pts</span>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- [TAB 2: AI SCANNER SCREEN] -->
-        <div id="screenScanner" class="space-y-4 hidden">
-            <div class="glass rounded-2xl p-5 text-center space-y-4 border-dashed border-2 border-slate-700 bg-slate-900/20">
-                <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl border border-emerald-500/20">
-                    <i class="fa-solid fa-expand"></i>
+                <!-- 라이벌전 매치 리포트 문구 -->
+                <div class="bg-blue-50 border border-blue-100 rounded-lg p-2 text-[10px] text-blue-900 leading-tight">
+                    <div class="font-bold text-blue-700 mb-0.5" id="compStatus">Toa Payoh is trailing by only 150 pts!</div>
+                    <p class="text-slate-600" id="compMsg">Don't let Bishan win! Every bottle you recycle helps unlock multipliers for the whole neighborhood!</p>
                 </div>
-                <div>
-                    <h2 class="font-bold text-base text-slate-200" id="lblScanPageTitle">AI Vision Scanner</h2>
-                    <p class="text-xs text-slate-400 mt-1" id="lblScanPageDesc">Point camera at the item or choose one in the controller below</p>
-                </div>
-            </div>
+            </section>
 
-            <div id="scanResultBox" class="bg-slate-900/60 rounded-xl p-4 border border-slate-800 text-xs text-slate-300 space-y-2">
-                <div class="flex justify-between items-center font-bold text-emerald-400">
-                    <span id="resItemName" class="text-sm text-slate-200">No item scanned yet</span>
-                    <span id="resPointsEarned" class="text-[10px] px-2 py-0.5 rounded-md font-extrabold bg-slate-800 text-slate-500">0 PTS</span>
-                </div>
-                <hr class="border-slate-800" />
-                <p class="text-slate-400 text-[11px] leading-relaxed" id="resInstruction">Your dynamic AI instructions will appear here once an item is fed via the control panel.</p>
-            </div>
-        </div>
+        </main>
 
-        <!-- [TAB 3: LEADERBOARD SCREEN] -->
-        <div id="screenLeaderboard" class="space-y-4 hidden">
-            <div class="text-center py-2">
-                <h2 class="font-extrabold text-base text-slate-200" id="lblBoardTitle">West Zone Standings</h2>
-                <p class="text-[11px] text-slate-400 uppercase tracking-wider font-bold mt-0.5" id="lblBoardSub">Weekly Neighborhood Battle</p>
-            </div>
-
-            <div class="space-y-2.5 text-xs">
-                <div class="relative bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex justify-between items-center overflow-hidden">
-                    <div class="absolute left-0 top-0 bottom-0 bg-emerald-500/5 w-[84%]" id="barWidthA"></div>
-                    <span class="font-semibold text-slate-300 z-10 flex items-center gap-1.5">🥇 <span id="distAName">Jurong West (NTU)</span></span>
-                    <span class="font-extrabold text-emerald-400 z-10 font-mono transition-all" id="scoreA">45,050 pts</span>
-                </div>
-                <div class="relative bg-slate-900/50 p-3 rounded-xl border border-slate-800 flex justify-between items-center overflow-hidden">
-                    <div class="absolute left-0 top-0 bottom-0 bg-amber-500/5 w-[85%]" id="barWidthB"></div>
-                    <span class="font-semibold text-slate-300 z-10 flex items-center gap-1.5">🥈 <span id="distBName">Clementi (NUS)</span></span>
-                    <span class="font-extrabold text-slate-100 z-10 font-mono" id="scoreB">45,200 pts</span>
-                </div>
-            </div>
-
-            <div class="bg-gradient-to-r from-blue-950/40 to-indigo-950/40 border border-blue-900/40 rounded-2xl p-4 text-xs text-blue-300">
-                <div class="font-bold mb-1.5 flex items-center gap-1.5 text-blue-200">
-                    <i class="fa-solid fa-trophy text-[11px] text-amber-400"></i>
-                    <span id="compStatus">Jurong West trails by only 150 pts!</span>
-                </div>
-                <p class="text-slate-400 leading-relaxed text-[11px]" id="compMsg">Don't let Clementi beat us! Recycle at any Jurong campus RVM now to unlock the 1.5x points multiplier for the whole Kampong!</p>
-            </div>
-        </div>
+        <!-- 하단 고정 메뉴바 -->
+        <nav class="bg-white border-t border-slate-100 h-12 flex items-center justify-around text-slate-400 text-[9px] font-medium">
+            <div class="text-emerald-600"><i class="fa-solid fa-house text-sm block mb-0.5"></i>Home</div>
+            <div><i class="fa-solid fa-map-location-dot text-sm block mb-0.5"></i>Bin Finder</div>
+            <div><i class="fa-solid fa-ticket text-sm block mb-0.5"></i>CDC Rewards</div>
+        </nav>
     </div>
 
-    <!-- 3. FIXED BOTTOM NAVIGATION BAR (화면 맨 밑바닥에 완전 고정) -->
-    <nav class="glass fixed bottom-0 left-0 right-0 max-w-[450px] mx-auto h-16 flex items-center justify-around text-slate-400 text-[10px] font-bold shadow-[0_-5px_20px_rgba(0,0,0,0.4)] z-50 border-t border-slate-800/80">
-        <button id="btnNavHome" onclick="switchTab('home')" class="text-emerald-400 flex flex-col items-center gap-0.5 w-full h-full justify-center">
-            <i class="fa-solid fa-house text-base"></i>
-            <span id="navHome">Home</span>
-        </button>
-        <button id="btnNavScanner" onclick="switchTab('scanner')" class="flex flex-col items-center gap-0.5 w-full h-full justify-center">
-            <i class="fa-solid fa-camera text-base"></i>
-            <span id="navScanner">AI Scanner</span>
-        </button>
-        <button id="btnNavBoard" onclick="switchTab('leaderboard')" class="flex flex-col items-center gap-0.5 w-full h-full justify-center relative">
-            <i class="fa-solid fa-trophy text-base"></i>
-            <span id="navBoard">Leaderboard</span>
-            <span id="badgeDot" class="absolute top-3 right-12 w-2 h-2 bg-rose-500 rounded-full hidden"></span>
-        </button>
-    </nav>
-
-    <!-- 4. CONTROLLER PANEL (탭 바 바로 위에 위치하도록 레이아웃 조정) -->
-    <div class="fixed bottom-16 left-0 right-0 max-w-[450px] mx-auto bg-slate-900 border-t border-slate-800 p-3 shadow-2xl z-40 grid grid-cols-2 gap-2 text-xs">
-        <div>
-            <label class="block text-[9px] text-slate-500 font-bold uppercase mb-0.5">Step 1: Feed AI Scan</label>
-            <select id="inputItem" onchange="processAppState('scan')" class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded-xl p-1.5 focus:outline-none cursor-pointer">
-                <option value="">-- Select Item --</option>
-                <option value="bottle">Plastic Bottle (+10)</option>
-                <option value="can">Aluminium Can (+15)</option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-[9px] text-slate-500 font-bold uppercase mb-0.5">Step 2 & 3: Drop Location</label>
-            <select id="inputLocation" onchange="processAppState('loc')" class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded-xl p-1.5 focus:outline-none cursor-pointer">
-                <option value="">-- Select Spot --</option>
-                <option value="NTU North Spine">NTU North Spine RVM</option>
-                <option value="Jurong Point">Jurong Point Blue Bin</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- 5. DICTIONARY & STATES ENGINE -->
+    <!-- [다국어 및 버튼 클릭 이벤트 데이터 레이어] -->
     <script>
-        let appState = {
-            points: 450, language: "EN", item: "", location: "",
-            distA: 45050, distB: 45200
-        };
-
-        const dictionary = {
+        const uiText = {
             EN: {
-                cdcTitle: "CDC Voucher Progress", lblMapTitle: "Nearby Smart RVM Finder",
-                lblScanPageTitle: "AI Vision Scanner", lblScanPageDesc: "Simulate scanning recyclable waste material",
-                lblBoardTitle: "West Zone Standings", lblBoardSub: "Weekly Neighborhood Battle",
-                navHome: "Home", navScanner: "AI Scanner", navBoard: "Leaderboard",
-                msgClose: "Swee lah! Only {diff} points away from your $5 CDC Voucher!",
-                msgFull: "Huat ah! $5 CDC Voucher Unlocked! Check your Rewards Wallet.",
-                items: {
-                    bottle: { name: "PET Plastic Bottle", inst: "💡 Step 1 Clear: AI validated PET. Tap 'AI Scanner' to check info. Then select a Drop Off Spot to complete the loop!" },
-                    can: { name: "Aluminium Beverage Can", inst: "💡 Step 1 Clear: AI validated Aluminum. Crush it down! Now choose a Drop Off Spot in the control panel." }
-                },
-                locations: {
-                    "NTU North Spine": {
-                        title: "Arrived at NTU North Spine! 🌲",
-                        body: "You're next to the Smart RVM. Drop your item now! Your score and Jurong West's team total will update instantly.",
-                        compStatus: "Jurong West score updated (+{pts} pts)!",
-                        compMsg: "Magnificent! NTU students are carries! Jurong West is destroying Clementi's lead. Keep dumping those bottles!"
-                    },
-                    "Jurong Point": {
-                        title: "Near Jurong Point Blue Bin 🛍️",
-                        body: "Bins located near Boon Lay MRT exit. Toss it in to bag your reward and bump Jurong West's tier multiplier!",
-                        compStatus: "Jurong West gains +{pts} pts!",
-                        compMsg: "Solid contribution! Every bottle helps Jurong West secure the Top Eco-District title over Clementi this week!"
-                    }
-                },
-                compDefaultStatus: "Jurong West trails by only 150 pts!",
-                compDefaultMsg: "Don't let Clementi beat us! Recycle at any Jurong campus RVM now to unlock the 1.5x points multiplier for the whole Kampong!"
+                cdcTitle: "CDC Voucher Progress", cdcMsg: "Swee lah! Only 50 points away from your $5 CDC Voucher!",
+                scanTitle: "AI Recycle Scanner", scanDesc: "Click an item below to simulate a camera scan:",
+                remTitle: "Location-Based Reminder", btnRemText: "Simulate Walking Past Toa Payoh Hub",
+                compTitle: "Eco-Districts Competition", lblGuide: "Guide:",
+                bottle: { name: "Plastic Bottle", inst: "Give it a quick rinse and toss it in the blue bin!" },
+                can: { name: "Aluminium Can", inst: "Crush it flat to save space in the recycling bin!" },
+                notif: { title: "Hey Toa Payoh Resident! 🇸🇬", body: "You are next to a recycling machine! Recycle now to claim your CDC Voucher before lunch." },
+                comp: { status: "Toa Payoh is trailing by only 150 pts!", msg: "Don't let Bishan win! Every bottle you recycle helps unlock multipliers for the whole neighborhood!" }
             },
             CN: {
-                cdcTitle: "CDC 社区发展理事会礼券进度", lblMapTitle: "附近智能自动回收机导航",
-                lblScanPageTitle: "AI 智能视觉扫描", lblScanPageDesc: "在此模拟对可回收废弃物的图像扫描",
-                lblBoardTitle: "新加坡西区荣誉榜", lblBoardSub: "社区每周绿色对抗赛",
-                navHome: "主页", navScanner: "AI 扫描", navBoard: "排行榜",
-                msgClose: "太棒了！只需再拿 {diff} 积分即可兑换 $5 CDC 礼券！",
-                msgFull: "恭喜！您已成功解锁面值 $5 的 CDC 社区礼券！",
-                items: {
-                    bottle: { name: "塑料饮料瓶", inst: "💡 第一步完成: AI 已确认可回收塑料。点击下方导航栏의 'AI Scanner' 查看，再选择投放点以完成循环！" },
-                    can: { name: "铝制饮料罐", inst: "💡 第一步完成: AI 已识别高级铝。请彻底压扁, 然后在控制面板选择附近的投放点！" }
-                },
-                locations: {
-                    "NTU North Spine": {
-                        title: "已抵达 NTU 北翼中心 (North Spine) 🌲",
-                        body: "自动回收机就在您身边！立即投放，您的个人积分与裕廊西团队总分将实时同步更新。",
-                        compStatus: "裕廊西社区积分成功增加 +{pts} 分！",
-                        compMsg: "太给力了！NTU 的同学们太强了！裕廊西正在疯狂拉近与金文泰的差距, 冲啊！"
-                    },
-                    "Jurong Point": {
-                        title: "靠近裕廊坊 (Jurong Point) 回收箱 🛍️",
-                        body: "蓝色回收箱位于文礼地铁站出口附近。立即投放以赢取礼券奖励并提升整个社区的积分加成倍率！",
-                        compStatus: "裕廊西积分成功加 +{pts} 分！",
-                        compMsg: "感谢您的贡献！每一份回收都在帮助裕廊西本周击败金文泰，拿下西区绿色环保冠军荣誉！"
-                    }
-                },
-                compDefaultStatus: "裕廊西目前仅落后金文泰 150 积分！",
-                compDefaultMsg: "别让金文泰赢！在裕廊西或校园投放任何瓶子，都能帮整个社区解锁 1.5 倍的积分加成奖励！"
+                cdcTitle: "CDC 社区发展理事会礼券进度", cdcMsg: "太棒了！只需再拿 50 积分即可兑换 $5 CDC 礼券！",
+                scanTitle: "AI 智能垃圾扫描器", scanDesc: "点击下方物品模拟摄像头扫描：",
+                remTitle: "智能位置提醒", btnRemText: "模拟路过大巴窑中心 (Toa Payoh Hub)",
+                compTitle: "生态社区对抗赛", lblGuide: "回收指引:",
+                bottle: { name: "塑料饮料瓶", inst: "简单冲洗干净，然后投入蓝色回收箱！" },
+                can: { name: "铝制饮料罐", inst: "彻底压扁它，以节省回收箱的空间！" },
+                notif: { title: "嗨，大巴窑居民！🇸🇬", body: "您现在就在回收机旁边！午餐前快把空罐放进去，填满您的 CDC 礼券积分吧！" },
+                comp: { status: "大巴窑目前仅落后 150 积分！", msg: "别让碧山赢！您回收 regional 每一个瓶子，都能帮整个社区解锁双倍积分加成！" }
             }
         };
 
-        function switchTab(tabId) {
-            document.getElementById("screenHome").classList.add("hidden");
-            document.getElementById("screenScanner").classList.add("hidden");
-            document.getElementById("screenLeaderboard").classList.add("hidden");
+        let currentLang = "EN";
+
+        function toggleLang() {
+            currentLang = document.getElementById("langSelect").value;
+            const data = uiText[currentLang];
+
+            // 텍스트 교체
+            document.getElementById("cdcTitle").innerText = data.cdcTitle;
+            document.getElementById("cdcMsg").innerText = data.cdcMsg;
+            document.getElementById("scanTitle").innerText = data.scanTitle;
+            document.getElementById("scanDesc").innerText = data.scanDesc;
+            document.getElementById("remTitle").innerText = data.remTitle;
+            document.getElementById("btnRemText").innerText = data.btnRemText;
+            document.getElementById("compTitle").innerText = data.compTitle;
+            document.getElementById("lblGuide").innerText = data.lblGuide;
             
-            document.getElementById("btnNavHome").className = "flex flex-col items-center gap-0.5 w-full h-full justify-center";
-            document.getElementById("btnNavScanner").className = "flex flex-col items-center gap-0.5 w-full h-full justify-center";
-            document.getElementById("btnNavBoard").className = "flex flex-col items-center gap-0.5 w-full h-full justify-center relative";
+            document.getElementById("compStatus").innerText = data.comp.status;
+            document.getElementById("compMsg").innerText = data.comp.msg;
+            document.getElementById("notifTitle").innerText = data.notif.title;
+            document.getElementById("notifBody").innerText = data.notif.body;
 
-            if(tabId === 'home') {
-                document.getElementById("screenHome").classList.remove("hidden");
-                document.getElementById("btnNavHome").classList.add("text-emerald-400");
-            } else if(tabId === 'scanner') {
-                document.getElementById("screenScanner").classList.remove("hidden");
-                document.getElementById("btnNavScanner").classList.add("text-emerald-400");
-            } else if(tabId === 'leaderboard') {
-                document.getElementById("screenLeaderboard").classList.remove("hidden");
-                document.getElementById("btnNavBoard").classList.add("text-emerald-400");
-                document.getElementById("badgeDot").classList.add("hidden");
-            }
+            // 상태 초기화
+            document.getElementById("scanResult").classList.add("hidden");
+            document.getElementById("popNotif").classList.add("hidden");
         }
 
-        function updateLanguage() {
-            appState.language = document.getElementById("langSelect").value;
-            processAppState(null);
+        function clickScan(type) {
+            const data = uiText[currentLang];
+            document.getElementById("resName").innerText = data[type].name;
+            document.getElementById("resInst").innerText = data[type].inst;
+            document.getElementById("resPts").innerText = type === 'bottle' ? '+10 PTS' : '+15 PTS';
+            document.getElementById("scanResult").classList.remove("hidden");
         }
 
-        function processAppState(triggerSource) {
-            const lang = appState.language;
-            const dict = dictionary[lang];
-
-            const itemKey = document.getElementById("inputItem").value;
-            const locKey = document.getElementById("inputLocation").value;
-
-            document.getElementById("navHome").innerText = dict.navHome;
-            document.getElementById("navScanner").innerText = dict.navScanner;
-            document.getElementById("navBoard").innerText = dict.navBoard;
-            document.getElementById("lblCdcTitle").innerText = dict.cdcTitle;
-            document.getElementById("lblMapTitle").innerText = dict.lblMapTitle;
-            document.getElementById("lblScanPageTitle").innerText = dict.lblScanPageTitle;
-            document.getElementById("lblScanPageDesc").innerText = dict.lblScanPageDesc;
-            document.getElementById("lblBoardTitle").innerText = dict.lblBoardTitle;
-            document.getElementById("lblBoardSub").innerText = dict.lblBoardSub;
-
-            let userPts = 450;
-            let currentDistA = 45050; 
-            let currentDistB = 45200; 
-            let added = 0;
-
-            if (itemKey && dict.items[itemKey]) {
-                added = itemKey === 'bottle' ? 10 : 15;
-                document.getElementById("resItemName").innerText = dict.items[itemKey].name;
-                document.getElementById("resPointsEarned").innerText = `+${added} PTS`;
-                document.getElementById("resPointsEarned").className = "text-[10px] px-2 py-0.5 rounded-md font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-                document.getElementById("resInstruction").innerText = dict.items[itemKey].inst;
-                
-                if (triggerSource === 'scan') switchTab('scanner');
-            } else {
-                document.getElementById("resItemName").innerText = lang === "EN" ? "No item scanned yet" : "尚未扫描任何物品";
-                document.getElementById("resPointsEarned").innerText = "0 PTS";
-                document.getElementById("resPointsEarned").className = "text-[10px] px-2 py-0.5 rounded-md font-extrabold bg-slate-800 text-slate-500";
-                document.getElementById("resInstruction").innerText = lang === "EN" ? "Your dynamic AI instructions will appear here once an item is fed via the control panel." : "请使用下方控制面板选择一个物品以触发 AI 识别分析。";
-            }
-
-            if (locKey && dict.locations[locKey]) {
-                userPts += added;
-                currentDistA += added; 
-                
-                document.getElementById("notifTitle").innerText = dict.locations[locKey].title;
-                document.getElementById("notifBody").innerText = dict.locations[locKey].body;
-                document.getElementById("notifBox").className = "bg-slate-900/90 text-slate-100 rounded-xl p-3.5 border border-amber-500/40 flex gap-3 items-start opacity-100 shadow-md";
-                
-                document.getElementById("compStatus").innerText = dict.locations[locKey].compStatus.replace("{pts}", added);
-                document.getElementById("compMsg").innerText = dict.locations[locKey].compMsg;
-
-                if (triggerSource === 'loc') {
-                    document.getElementById("badgeDot").classList.remove("hidden");
-                    switchTab('home'); 
-                }
-            } else {
-                document.getElementById("notifTitle").innerText = lang === "EN" ? "GPS: Waiting for Campus Signal..." : "正在等待校园定位...";
-                document.getElementById("notifBody").innerText = lang === "EN" ? "Select a Jurong Drop Off Spot in the controller below to simulate smart proximity notifications." : "在下方控制面板选择一个西区投放地点, 以触发位置感知通知。";
-                document.getElementById("notifBox").className = "bg-slate-900/60 rounded-xl p-3.5 border border-slate-800/80 flex gap-3 items-start opacity-40 transition-all";
-                
-                document.getElementById("compStatus").innerText = dict.compDefaultStatus;
-                document.getElementById("compMsg").innerText = dict.compDefaultMsg;
-            }
-
-            document.getElementById("txtPointsDisplay").innerText = `${userPts} / 500 PTS`;
-            const pct = Math.round((userPts / 500) * 100);
-            document.getElementById("txtPercent").innerText = `${pct}%`;
-            document.getElementById("barCdc").style.width = `${pct}%`;
-            document.getElementById("txtCdcMessage").innerText = userPts >= 500 ? dict.msgFull : dict.msgClose.replace("{diff}", 500 - userPts);
-
-            document.getElementById("scoreA").innerText = `${currentDistA.toLocaleString()} pts`;
-            document.getElementById("scoreB").innerText = `${currentDistB.toLocaleString()} pts`;
-            
-            const maxVal = Math.max(currentDistA, currentDistB);
-            document.getElementById("barWidthA").style.width = `${(currentDistA / maxVal) * 100}%`;
-            document.getElementById("barWidthB").style.width = `${(currentDistB / maxVal) * 100}%`;
+        function clickReminder() {
+            document.getElementById("popNotif").classList.remove("hidden");
         }
-
-        processAppState(null);
     </script>
 </body>
 </html>
